@@ -33,15 +33,13 @@ public class CheckerListener implements Listener {
         String name = e.getPlayer().getName();
         Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
 
-        if (e.getQuitMessage().length() == 0){
-            new Thread(()->{
-                for (Player player : players){
-                    if (player.isOp() || player.hasPermission("7misys.op")){
-                        player.sendMessage(ChatColor.YELLOW +"[ななみ鯖] " + ChatColor.RESET + name + "さんが退出しました。");
-                    }
+        new Thread(()->{
+            for (Player player : players){
+                if (player.isOp() || player.hasPermission("7misys.op")){
+                    player.sendMessage(ChatColor.YELLOW +"[ななみ鯖] " + ChatColor.RESET + name + "さんが退出しました。");
                 }
-            }).start();
-        }
+            }
+        }).start();
     }
 
 }

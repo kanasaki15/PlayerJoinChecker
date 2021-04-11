@@ -3,3 +3,8 @@ version: @version@
 main: xyz.n7mn.dev.playerjoinchecker.PlayerJoinChecker
 authors: [ 7mi_chan ]
 description: PlayerJoinChecker
+
+commands:
+  perm:
+    usage: '/perm'
+    description: ''
