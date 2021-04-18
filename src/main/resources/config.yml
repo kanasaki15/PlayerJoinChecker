@@ -1,0 +1,10 @@
+# 起動時設定するまで入れる権限レベル
+DefaultJoinPermRank: 7
+
+# MySQL設定
+MySQLServer: ''
+MySQLPort: 3306
+MySQLDatabase: ''
+MySQLOption: '?allowPublicKeyRetrieval=true&useSSL=false'
+MySQLUsername: ''
+MySQLPassword: ''

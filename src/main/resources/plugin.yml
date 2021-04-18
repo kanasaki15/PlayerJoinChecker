@@ -6,5 +6,11 @@ description: PlayerJoinChecker
 
 commands:
   perm:
-    usage: '/perm'
+    usage: '/perm <mcid>'
+    description: ''
+  join:
+    usage: '/join <rank>'
+    description: ''
+  joinall:
+    usage: '/joinall'
     description: ''
