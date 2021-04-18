@@ -13,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.sql.*;
 import java.util.Collection;
+import java.util.Enumeration;
 
 public class CheckerListener implements Listener {
 
@@ -52,29 +53,83 @@ public class CheckerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void AsyncPlayerPreLoginEvent (AsyncPlayerPreLoginEvent e){
 
+        int rank = 0;
+        String userRankName = "一般";
+        String reqRankName = ",";
         try {
+            boolean found = false;
+            Enumeration<Driver> drivers = DriverManager.getDrivers();
+
+            while (drivers.hasMoreElements()){
+                Driver driver = drivers.nextElement();
+                if (driver.equals(new com.mysql.cj.jdbc.Driver())){
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found){
+                DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
+            }
+
             Connection con = DriverManager.getConnection("" +
                     "jdbc:mysql://"+
                     plugin.getConfig().getString("MySQLServer")+ ":"+plugin.getConfig().getInt("MySQLPort")+ "/"+
                     plugin.getConfig().getString("MySQLDatabase")+
-                    plugin.getConfig().getString("MysqlOption"),
-                    plugin.getConfig().getString("MysqlUsername"),
-                    plugin.getConfig().getString("MysqlPassword")
+                    plugin.getConfig().getString("MySQLOption"),
+                    plugin.getConfig().getString("MySQLUsername"),
+                    plugin.getConfig().getString("MySQLPassword")
             );
             con.setAutoCommit(true);
 
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM MinecraftUserList WHERE MinecraftUUID = ?");
+            PreparedStatement statement = con.prepareStatement("" +
+                    "SELECT * FROM MinecraftUserList, RoleRankList " +
+                    "WHERE MinecraftUserList.RoleUUID = RoleRankList.UUID" +
+                    "  AND MinecraftUUID = ?;"
+            );
             statement.setString(1, e.getUniqueId().toString());
             ResultSet set = statement.executeQuery();
 
+            if (set.next()){
+                rank = set.getInt("Rank");
+                userRankName = set.getString("Name");
+            }
 
             set.close();
             statement.close();
+
+            PreparedStatement statement2 = con.prepareStatement("SELECT * FROM RoleRankList");
+            ResultSet set2 = statement2.executeQuery();
+
+            StringBuffer sb = new StringBuffer();
+            while (set2.next()){
+                if (set2.getInt("Rank") == plugin.getConfig().getInt("DefaultJoinPermRank")){
+                    sb.append(set2.getString("Name"));
+                    sb.append(",");
+                }
+            }
+            reqRankName = sb.toString();
+
+            set2.close();
+            statement2.close();
             con.close();
         } catch (SQLException ex){
             ex.printStackTrace();
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_FULL, "--- ななみ鯖 ---\n現在サーバーメンテナンス中です。しばらくお待ち下さい。");
+            return;
         }
 
+        if (rank >= plugin.getConfig().getInt("DefaultJoinPermRank")){
+            e.allow();
+            return;
+        }
+
+        e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_FULL, "" +
+                "--- ななみ鯖 ---\n" +
+                "現在あなたの権限では入室できません。\n" +
+                "あなたの権限 : " + userRankName + "\n" +
+                "必要な権限 : " + reqRankName.substring(0, reqRankName.length() - 1) + "以上"
+        );
     }
 
 }

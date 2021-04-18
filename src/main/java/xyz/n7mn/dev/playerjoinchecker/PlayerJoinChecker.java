@@ -15,27 +15,6 @@ public final class PlayerJoinChecker extends JavaPlugin {
         // Plugin startup logic]
         saveDefaultConfig();
 
-        try {
-            boolean found = false;
-            Enumeration<Driver> drivers = DriverManager.getDrivers();
-
-            while (drivers.hasMoreElements()){
-                Driver driver = DriverManager.getDrivers().nextElement();
-                if (driver.equals(new com.mysql.cj.jdbc.Driver())){
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found){
-                DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-            }
-
-        } catch (SQLException e){
-            e.printStackTrace();
-            Bukkit.getServer().getPluginManager().disablePlugin(this);
-        }
-
         getServer().getPluginManager().registerEvents(new CheckerListener(this), this);
         getLogger().info(this.getName() + " " + this.getDescription().getVersion() + " Loaded!!");
     }

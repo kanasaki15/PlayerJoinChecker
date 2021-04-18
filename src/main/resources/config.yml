@@ -5,6 +5,6 @@ DefaultJoinPermRank: 7
 MySQLServer: ''
 MySQLPort: 3306
 MySQLDatabase: ''
-MySQLOption: '?allowPublicKeyRetrieval=true&useSSL=false'
+MySQLOption: '?useSSL=false&allowPublicKeyRetrieval=true'
 MySQLUsername: ''
 MySQLPassword: ''
