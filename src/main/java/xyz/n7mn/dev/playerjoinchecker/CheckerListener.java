@@ -55,7 +55,7 @@ public class CheckerListener implements Listener {
 
         int rank = 0;
         String userRankName = "一般";
-        String reqRankName = ",";
+        String reqRankName;
         try {
             boolean found = false;
             Enumeration<Driver> drivers = DriverManager.getDrivers();
@@ -115,7 +115,7 @@ public class CheckerListener implements Listener {
             con.close();
         } catch (SQLException ex){
             ex.printStackTrace();
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_FULL, "--- ななみ鯖 ---\n現在サーバーメンテナンス中です。しばらくお待ち下さい。");
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_FULL, "\n--- ななみ鯖 ---\n現在サーバーメンテナンス中です。しばらくお待ち下さい。");
             return;
         }
 
@@ -124,11 +124,13 @@ public class CheckerListener implements Listener {
             return;
         }
 
-        e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_FULL, "" +
+        e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_FULL, "\n" +
                 "--- ななみ鯖 ---\n" +
                 "現在あなたの権限では入室できません。\n" +
                 "あなたの権限 : " + userRankName + "\n" +
-                "必要な権限 : " + reqRankName.substring(0, reqRankName.length() - 1) + "以上"
+                "必要な権限 : " + reqRankName.substring(0, reqRankName.length() - 1) + "以上\n" +
+                "\n" +
+                "詳しくはDiscordまで : https://discord.gg/sf4BSPryKy"
         );
     }
 

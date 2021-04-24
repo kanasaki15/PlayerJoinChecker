@@ -1,5 +1,5 @@
 # 起動時設定するまで入れる権限レベル
-DefaultJoinPermRank: 7
+DefaultJoinPermRank: 10
 
 # MySQL設定
 MySQLServer: ''
