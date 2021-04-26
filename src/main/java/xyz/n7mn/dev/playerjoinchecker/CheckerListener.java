@@ -53,7 +53,7 @@ public class CheckerListener implements Listener {
     @EventHandler
     public void AsyncPlayerPreLoginEvent (AsyncPlayerPreLoginEvent e){
 
-        System.out.println("test2");
+        // System.out.println("test2");
 
         int rank = 0;
         String userRankName = "一般";
