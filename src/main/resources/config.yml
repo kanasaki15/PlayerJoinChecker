@@ -1,6 +1,8 @@
 # 起動時設定するまで入れる権限レベル
 DefaultJoinPermRank: 10
 
+DiscordInviteLink: 'https://discord.gg/sf4BSPryKy'
+
 # MySQL設定
 MySQLServer: ''
 MySQLPort: 3306

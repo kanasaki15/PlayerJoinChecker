@@ -117,7 +117,12 @@ public class CheckerListener implements Listener {
             con.close();
         } catch (SQLException ex){
             ex.printStackTrace();
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_FULL, "\n--- ななみ鯖 ---\n現在サーバーメンテナンス中です。しばらくお待ち下さい。");
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_FULL, "\n" +
+                    "--- ななみ鯖 ---\n" +
+                    "現在サーバーメンテナンス中です。しばらくお待ち下さい。" +
+                    "\n" +
+                    "詳しくはDiscordまで : "+plugin.getConfig().getString("DiscordInviteLink")
+            );
             return;
         }
 
@@ -132,8 +137,17 @@ public class CheckerListener implements Listener {
                 "あなたの権限 : " + userRankName + "\n" +
                 "必要な権限 : " + reqRankName.substring(0, reqRankName.length() - 1) + "以上\n" +
                 "\n" +
-                "詳しくはDiscordまで : https://discord.gg/sf4BSPryKy"
+                "詳しくはDiscordまで : "+plugin.getConfig().getString("DiscordInviteLink")
         );
+
+        String finalUserRankName = userRankName;
+        new Thread(()->{
+            for (Player player : Bukkit.getServer().getOnlinePlayers()){
+                if (player.isOp() || player.hasPermission("7misystem.op")){
+                    player.sendMessage(ChatColor.YELLOW + "[ななみ鯖] "+ChatColor.RESET+e.getName()+"さんが入室を試みました。(権限: "+ finalUserRankName +")");
+                }
+            }
+        }).start();
     }
 
 }
